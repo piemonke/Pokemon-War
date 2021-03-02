@@ -3,37 +3,59 @@
 // console.log($);
 
 let pokeList = [];
-let urlNext = "https://pokeapi.co/api/v2/pokemon/";
+let urlInit = "https://pokeapi.co/api/v2/pokemon";
 
-const promise = $.ajax({
-    url:urlNext
-});
+let promise = $.ajax({
+    url:"https://pokeapi.co/api/v2/pokemon?offset=0&limit=" + length
+});;
 
-console.log(promise);
+getLength();
 
-// promise.then(
-//     (data) => {
-//         // console.log(data.next);
-//         urlNext = data.next;
-//         pokeList = data.results;
-//         data.next
-//         // console.log(pokeList);
-//     },
-//     (error) => {
-//         console.log("error", error);
-//     }
-// );
+
+//puts data into array
+promise.then(
+    (data) => {
+        console.log(data.count);
+        urlNext = data.next;
+        console.log(urlNext);
+        pokeList = data.results;
+        // console.log(pokeList);
+    },
+    (error) => {
+        console.log("Pull Request Denied", error);
+    }
+);
 
 //loop to add all pokemon to array, and eventually remove any gigantimax or mega evolutions
 // while(data.next results has an array with items in it) {
     // add those items to pokeList
 // }
 
+// console.log(urlNext)
+
+
+
 
 //variables
 
 
 //functions
+
+//function to get number of pokemon in API
+function getLength() {
+    $.ajax({
+        url:"https://pokeapi.co/api/v2/pokemon"
+    }).then(
+        (data) => {
+            // console.log(data.count);
+            length = data.count;
+        },
+        (error) => {
+            console.log("Bad Pull Request", error);
+        }
+    );
+}
+
 
 //deals card from deck
 function deal() {
