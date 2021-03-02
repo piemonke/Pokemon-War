@@ -3,28 +3,29 @@
 // console.log($);
 
 let pokeList = [];
-let urlInit = "https://pokeapi.co/api/v2/pokemon";
 
-let promise = $.ajax({
-    url:"https://pokeapi.co/api/v2/pokemon?offset=0&limit=" + length
-});;
+
 
 getLength();
+// console.log("https://pokeapi.co/api/v2/pokemon?offset=0&limit=" + length.toString());
 
+// let promise = $.ajax({
+//     url:"https://pokeapi.co/api/v2/pokemon?offset=0&limit=" + length.toString()
+// });;
 
 //puts data into array
-promise.then(
-    (data) => {
-        console.log(data.count);
-        urlNext = data.next;
-        console.log(urlNext);
-        pokeList = data.results;
-        // console.log(pokeList);
-    },
-    (error) => {
-        console.log("Pull Request Denied", error);
-    }
-);
+// promise.then(
+//     (data) => {
+//         console.log(data.count);
+//         urlNext = data.next;
+//         console.log(urlNext);
+//         pokeList = data.results;
+//         // console.log(pokeList);
+//     },
+//     (error) => {
+//         console.log("Pull Request Denied", error);
+//     }
+// );
 
 //loop to add all pokemon to array, and eventually remove any gigantimax or mega evolutions
 // while(data.next results has an array with items in it) {
@@ -49,6 +50,16 @@ function getLength() {
         (data) => {
             // console.log(data.count);
             length = data.count;
+            $.ajax({
+                url:"https://pokeapi.co/api/v2/pokemon?offset=0&limit=" + length
+            }).then(
+                (data) => {
+                    console.log(data);
+                },
+                (error) => {
+                    console.log("Nested Pull Request Denied", error);
+                }
+            )
         },
         (error) => {
             console.log("Bad Pull Request", error);
