@@ -1,5 +1,34 @@
+//random testing, will be removed on finished project
 // alert("JS is loaded");
 // console.log($);
+
+let pokeList = [];
+let urlNext = "https://pokeapi.co/api/v2/pokemon/";
+
+const promise = $.ajax({
+    url:urlNext
+});
+
+console.log(promise);
+
+// promise.then(
+//     (data) => {
+//         // console.log(data.next);
+//         urlNext = data.next;
+//         pokeList = data.results;
+//         data.next
+//         // console.log(pokeList);
+//     },
+//     (error) => {
+//         console.log("error", error);
+//     }
+// );
+
+//loop to add all pokemon to array, and eventually remove any gigantimax or mega evolutions
+// while(data.next results has an array with items in it) {
+    // add those items to pokeList
+// }
+
 
 //variables
 
