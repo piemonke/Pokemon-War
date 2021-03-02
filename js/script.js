@@ -8,6 +8,7 @@
 
 //variables
 let pokeList = [];
+let removedPoke = [];
 
 
 
@@ -29,11 +30,19 @@ function getLength() {
                 url:"https://pokeapi.co/api/v2/pokemon?offset=0&limit=" + length
             }).then(
                 (data) => {
-                    console.log(data);
+                    // console.log(data);
                     pokeList = (data.results);
                     //currently array holds only pokemon name and url
                     //require pokemon stats
                     //need to iterate over each array index to pull stats from API
+                    //also want to remove gimmick pokemon (gmax, mega evolutions, etc)--accomplished
+                    pokeList.forEach(function(pokemon, index) {
+                        if(pokemon.name.includes("-gmax") || pokemon.name.includes("-mega")) {
+                            removedPoke.push(pokeList.splice(index, 1));
+                        }
+                    });
+                    // console.log(pokeList);
+                    
                 },
                 (error) => {
                     console.log("Nested Pull Request Denied", error);
