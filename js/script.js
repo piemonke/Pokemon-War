@@ -12,14 +12,14 @@ let removedPoke = [];
 
 
 
-getLength();
+getPokeList();
 
 
 //functions
 
 //function to get number of pokemon in API
 //nested pull request puts all data into array
-function getLength() {
+function getPokeList() {
     $.ajax({
         url:"https://pokeapi.co/api/v2/pokemon"
     }).then(
@@ -40,12 +40,31 @@ function getLength() {
                         if(pokemon.name.includes("-gmax") || pokemon.name.includes("-mega")) {
                             removedPoke.push(pokeList.splice(index, 1));
                         }
+                        //pull stats and typing from API
+                        //add to each object in array
+                        //NOTE: At the time of writing, 3 urls in this API are broken and returning 404 errors. Since their data cannot be pulled, I will be removing them from the pokeList array so that they do not cause errors in the actual game. This code has been added to the error catch so that any future broken urls are also caught.
+                        $.ajax({
+                            url:pokemon.url
+                        }).then(
+                            (data) => {
+                                // console.log(data);
+                                pokemon.sprites = data.sprites;
+                                pokemon.stats = data.stats;
+                                pokemon.types = data.types;
+                            },
+                            (error) => {
+                                console.log("Pokemon data pull request error", error);
+                                removedPoke.push(pokeList.splice(index, 1));
+                            }
+                        )
                     });
-                    // console.log(pokeList);
+                    console.log(pokeList);
                     
+                    //function calls for the game go here now
+
                 },
                 (error) => {
-                    console.log("Nested Pull Request Denied", error);
+                    console.log("Pokemon List Request Denied", error);
                 }
             )
         },
