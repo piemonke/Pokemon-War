@@ -9,6 +9,10 @@
 //variables
 let pokeList = [];
 let removedPoke = [];
+let playerHand = [];
+let playerWins = [];
+let compHand = [];
+let compWins = [];
 
 
 
@@ -79,7 +83,7 @@ function getPokeList() {
                     
                     
                     //function calls for the game go here now
-
+                    deal(pokeList, playerHand, compHand);
                 },
                 (error) => {
                     console.log("Pokemon List Request Denied", error);
@@ -104,13 +108,17 @@ function getPokeList() {
 //     }
 // )
 
-//deals card from deck
-function deal() {
-
+//deals card from main deck into
+function deal(deck, player, computer) {
+    while(deck.length) {
+        player.push(deck.splice(Math.floor(Math.random() * deck.length), 1));
+        computer.push(deck.splice(Math.floor(Math.random() * deck.length), 1));
+    }
+    // console.log(player, computer);
 }
 
 //shuffles each players deck when creating
-function shuffle(cards) {
+function shuffle(discarded, hand) {
 
 }
 
