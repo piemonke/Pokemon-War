@@ -47,10 +47,7 @@ $.ajax({
         //uncomment below for delivery
         //let length = data.count;
         //setting length to static ammount to make testing not take ages
-        let length = 11;
-        if(length % 2) {
-            length = length - 1;
-        }
+        let length = 6;
         $.ajax({
             url:"https://pokeapi.co/api/v2/pokemon?offset=0&limit=" + length
         }).then(
@@ -141,6 +138,10 @@ function main() {
 //deals card from main deck into each players hand
 function deal(deck, player, computer) {
     // console.log(deck);
+    //set deck length even to prevent undefined error
+    if(deck.length % 2) {
+        deck = deck.splice(0, deck.length - 1);
+    }
     while(deck.length > 0) {
         player.push(deck.splice(Math.floor(Math.random() * deck.length), 1)[0]);
         computer.push(deck.splice(Math.floor(Math.random() * deck.length), 1)[0]);
@@ -151,6 +152,7 @@ function deal(deck, player, computer) {
 //unshifts card from each deck, puts card on the field
 //handles DOM manipulation, calls comparison function
 function play() {
+    ifShuffle();
     //if either players hands AND winnings are both empty, declare victory
     //else continue with function 
     if(playerHand.length === 0 && playerWins.length === 0) {
@@ -162,16 +164,7 @@ function play() {
         //call newGame function
         newGame();
     } else {
-        //if either hand is empty, shuffle hands
-        //NO ELSE statement as both hands might need to be shuffled at the same time
-        if(playerHand.length === 0) {
-            console.log("shuffle player")
-            shuffle(playerWins, playerHand);
-        }
-        if(compHand.length === 0) {
-            console.log("shuffle comp")
-            shuffle(compWins, compHand);
-        }
+        
 
         cardPlayer = playerHand.shift();
         cardComp = compHand.shift();
@@ -199,7 +192,7 @@ function compare(player, comp) {
     if(player.stats === comp.stats) {
         console.log("tie");
         //call war function
-        // war();
+        war();
     } else if(player.stats > comp.stats) {
         console.log("player wins");
         //give cards to player deck
@@ -213,7 +206,7 @@ function compare(player, comp) {
 
 //adds cards won to winnings deck
 function addToWinnings(winnerDeck) {
-    console.log(pot);
+    // console.log(pot);
     //add pot to winnersDeck
     winnerDeck.push(...pot);
     // console.log(winnerDeck);
@@ -221,20 +214,23 @@ function addToWinnings(winnerDeck) {
     pot.splice(0, pot.length);
 }
 
-// function war() {
-//     console.log(playerHand, compHand);
-//     console.log("WAR")
-//     for(i = 0; i > 3; i++) {
-//         pot.push(playerHand.shift());
-//         pot.push(compHand.shift());
-//         console.log(pot);
-//     }
-//     console.log(playerHand, compHand);
-//     // console.log(pot);
-//     $("#war").on("click", function() {
-//         play();
-//     })
-// }
+function war() {
+    // console.log(playerHand, compHand);
+    console.log("WAR")
+    for(i = 0; i < 3; i++) {
+        ifShuffle();
+        console.log("players added to the pot");
+        pot.push(playerHand.shift());
+        pot.push(compHand.shift());
+        // console.log(pot);
+    }
+    // console.log(playerHand, compHand);
+    // console.log("WAR pot");
+    // console.log(pot);
+    $("#war").on("click", function() {
+        play();
+    })
+}
 
 //combines all cards back into one deck, reshuffles them, calls main again
 function newGame() {
@@ -258,4 +254,16 @@ function newGame() {
         $("#compcard").html(``)
         main();
     });
+}
+
+//tests if either deck needs to be shuffled and shuffles if needed
+function ifShuffle() {
+    if(playerHand.length === 0) {
+        console.log("shuffle player")
+        shuffle(playerWins, playerHand);
+    }
+    if(compHand.length === 0) {
+        console.log("shuffle comp")
+        shuffle(compWins, compHand);
+    }
 }
