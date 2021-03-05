@@ -84,6 +84,7 @@ function getPokeList() {
                     
                     //function calls for the game go here now
                     deal(pokeList, playerHand, compHand);
+                    play(playerHand, compHand);
                 },
                 (error) => {
                     console.log("Pokemon List Request Denied", error);
@@ -108,13 +109,27 @@ function getPokeList() {
 //     }
 // )
 
-//deals card from main deck into
+//main game function for function calls
+function main() {
+
+}
+
+//deals card from main deck into each players hand
 function deal(deck, player, computer) {
     while(deck.length) {
-        player.push(deck.splice(Math.floor(Math.random() * deck.length), 1));
-        computer.push(deck.splice(Math.floor(Math.random() * deck.length), 1));
+        player.push(deck.splice(Math.floor(Math.random() * deck.length), 1)[0]);
+        computer.push(deck.splice(Math.floor(Math.random() * deck.length), 1)[0]);
     }
     // console.log(player, computer);
+}
+
+//unshifts card from each deck, puts card on the field
+function play(player, computer) {
+    var cardPlayer = player.shift();
+    var cardComp = computer.shift();
+    
+    $("#playercard").html(`<h1>${cardPlayer.name}</h1>`)
+    $("#compcard").html(`<h1>${cardComp.name}</h1>`)
 }
 
 //shuffles each players deck when creating
