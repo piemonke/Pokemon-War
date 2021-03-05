@@ -48,9 +48,26 @@ function getPokeList() {
                         }).then(
                             (data) => {
                                 // console.log(data);
-                                pokemon.sprites = data.sprites;
-                                pokemon.stats = data.stats;
-                                pokemon.types = data.types;
+                                //store url for sprite data
+                                pokemon.sprite = data.sprites.front_default;
+
+                                //store all base stats added together
+                                let statTotal = 0;
+                                data.stats.forEach(stat => {
+                                    statTotal += stat.base_stat;
+                                });
+                                pokemon.stats = statTotal;
+
+                                //store type data
+                                // pokemon.types = data.types;
+                                let types = []
+                                data.types.forEach(type => {
+                                    types.push(type.type.name);
+                                });
+                                pokemon.types = types;
+
+                                //delete url, no longer needed
+                                delete pokemon.url;
                             },
                             (error) => {
                                 console.log("Pokemon data pull request error", error);
@@ -58,7 +75,8 @@ function getPokeList() {
                             }
                         )
                     });
-                    console.log(pokeList);
+                    // console.log(pokeList);
+                    
                     
                     //function calls for the game go here now
 
@@ -74,6 +92,17 @@ function getPokeList() {
     );
 }
 
+//type data that will setup later, this web will be annoying, need lots of .contains chec
+// $.ajax({
+//     url:"https://pokeapi.co/api/v2/type/10001/"
+// }).then(
+//     (data) => {
+//         console.log(data);
+//     },
+//     (error) => {
+//         console.log("type data pull error")
+//     }
+// )
 
 //deals card from deck
 function deal() {
@@ -94,3 +123,4 @@ function compare() {
 function addToWinnings() {
 
 }
+
