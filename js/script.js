@@ -15,7 +15,7 @@ let compHand = [];
 let compWins = [];
 let cardPlayer;
 let cardComp;
-
+let pot =[];
 
 
 getPokeList();
@@ -47,7 +47,10 @@ $.ajax({
         //uncomment below for delivery
         //let length = data.count;
         //setting length to static ammount to make testing not take ages
-        let length = 30;
+        let length = 11;
+        if(length % 2) {
+            length = length - 1;
+        }
         $.ajax({
             url:"https://pokeapi.co/api/v2/pokemon?offset=0&limit=" + length
         }).then(
@@ -125,6 +128,9 @@ $.ajax({
 
 //main game function for function calls
 function main() {
+    //hide or remove start button
+    $("#start").fadeOut();
+    $("#play").fadeIn();
     pokeList = pokeList.filter(pokemon => !pokemon.hasOwnProperty("url"));
     deal(pokeList, playerHand, compHand);
     $("#play").on("click", function() {
@@ -148,16 +154,22 @@ function play() {
     //if either players hands AND winnings are both empty, declare victory
     //else continue with function 
     if(playerHand.length === 0 && playerWins.length === 0) {
-        console.log("Computer Victory")
+        console.log("Computer Victory");
+        //call newGame function
+        newGame();
     } else if(compHand.length === 0 && compWins.length === 0) {
         console.log("Player Victory");
+        //call newGame function
+        newGame();
     } else {
         //if either hand is empty, shuffle hands
         //NO ELSE statement as both hands might need to be shuffled at the same time
         if(playerHand.length === 0) {
+            console.log("shuffle player")
             shuffle(playerWins, playerHand);
         }
         if(compHand.length === 0) {
+            console.log("shuffle comp")
             shuffle(compWins, compHand);
         }
 
@@ -182,32 +194,68 @@ function shuffle(oldHand, newHand) {
 
 //takes cards as input, compares, updates winner
 function compare(player, comp) {
-    let pot = [];
+    
     pot.push(player, comp)
     if(player.stats === comp.stats) {
         console.log("tie");
         //call war function
-        war(pot);
+        // war();
     } else if(player.stats > comp.stats) {
         console.log("player wins");
         //give cards to player deck
-        addToWinnings(playerWins, pot);
+        addToWinnings(playerWins);
     } else {
         console.log("computer wins");
         //give cards to comp deck
-        addToWinnings(compWins, pot);
+        addToWinnings(compWins);
     }
 }
 
 //adds cards won to winnings deck
-function addToWinnings(winnerDeck, cards) {
-    winnerDeck.push(...cards);
+function addToWinnings(winnerDeck) {
+    console.log(pot);
+    //add pot to winnersDeck
+    winnerDeck.push(...pot);
+    // console.log(winnerDeck);
+    //clear pot
+    pot.splice(0, pot.length);
 }
 
-function war(bigPot) {
-    for(i = 0; i > 3; i++) {
-        bigPot.push(playerHand.shift());
-        bigPot.push(compHand.shift());
-    }
-    play();
+// function war() {
+//     console.log(playerHand, compHand);
+//     console.log("WAR")
+//     for(i = 0; i > 3; i++) {
+//         pot.push(playerHand.shift());
+//         pot.push(compHand.shift());
+//         console.log(pot);
+//     }
+//     console.log(playerHand, compHand);
+//     // console.log(pot);
+//     $("#war").on("click", function() {
+//         play();
+//     })
+// }
+
+//combines all cards back into one deck, reshuffles them, calls main again
+function newGame() {
+    //add all cards back to pokelist
+    pokeList.push(...playerHand);
+    pokeList.push(...playerWins);
+    pokeList.push(...compHand);
+    pokeList.push(...compWins);
+    console.log(pokeList);
+
+    //remove all cards from hands
+    playerHand.splice(0, playerHand.length);
+    playerWins.splice(0, playerWins.length);
+    compHand.splice(0, compHand.length);
+    compWins.splice(0, compWins.length); 
+    //hide play button, create newGame button that calls main
+    $("#play").fadeOut();
+    $("#newGame").on("click", function() {
+        console.log("new game");
+        $("#playercard").html(``)
+        $("#compcard").html(``)
+        main();
+    });
 }
