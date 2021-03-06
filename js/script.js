@@ -6,7 +6,7 @@
 // console.log("https://pokeapi.co/api/v2/pokemon?offset=0&limit=" + length.toString());
 
 
-//variables
+//variables--move into smaller scope before delivery
 let pokeList = [];
 let removedPoke = [];
 let playerHand = [];
@@ -47,7 +47,7 @@ $.ajax({
         //uncomment below for delivery
         //let length = data.count;
         //setting length to static ammount to make testing not take ages
-        let length = 6;
+        let length = 52;
         $.ajax({
             url:"https://pokeapi.co/api/v2/pokemon?offset=0&limit=" + length
         }).then(
@@ -102,7 +102,12 @@ $.ajax({
         ).then((response) => {
             $("#start").on("click", function() {
                 main();
-            })
+            });
+            $("#mobileStart").on("click", function() {
+                $("#rules").fadeOut();
+                $("#mobileStart").fadeOut();
+                main();
+            });
         });
         
     },
@@ -156,22 +161,14 @@ function play() {
     //if either players hands AND winnings are both empty, declare victory
     //else continue with function 
     if(playerHand.length === 0 && playerWins.length === 0) {
-        console.log("Computer Victory");
-        //call newGame function
         newGame();
     } else if(compHand.length === 0 && compWins.length === 0) {
-        console.log("Player Victory");
-        //call newGame function
         newGame();
     } else {
-        
-
         cardPlayer = playerHand.shift();
         cardComp = compHand.shift();
-        // console.log(cardPlayer.stats);
-        // console.log(cardComp.stats);
-        $("#playercard").html(`<h1>${cardPlayer.name}</h1><br><p>${cardPlayer.stats}</p>`)
-        $("#compcard").html(`<h1>${cardComp.name}</h1><br><p>${cardComp.stats}</p>`)
+        $("#playercard").html(`<h1>${cardPlayer.name}</h1><br><img src="${cardPlayer.sprite}"><br><p>${cardPlayer.stats}</p>`)
+        $("#compcard").html(`<h1>${cardComp.name}</h1><br><img src="${cardComp.sprite}"><br><p>${cardComp.stats}</p>`)
 
         //call compare function to keep variables in scope
         compare(cardPlayer, cardComp);
@@ -190,15 +187,15 @@ function compare(player, comp) {
     
     pot.push(player, comp)
     if(player.stats === comp.stats) {
-        console.log("tie");
+        // console.log("tie");
         //call war function
         war();
     } else if(player.stats > comp.stats) {
-        console.log("player wins");
+        // console.log("player wins");
         //give cards to player deck
         addToWinnings(playerWins);
     } else {
-        console.log("computer wins");
+        // console.log("computer wins");
         //give cards to comp deck
         addToWinnings(compWins);
     }
@@ -216,10 +213,10 @@ function addToWinnings(winnerDeck) {
 
 function war() {
     // console.log(playerHand, compHand);
-    console.log("WAR")
+    // console.log("WAR")
     for(i = 0; i < 3; i++) {
         ifShuffle();
-        console.log("players added to the pot");
+        // console.log("players added to the pot");
         pot.push(playerHand.shift());
         pot.push(compHand.shift());
         // console.log(pot);
@@ -249,7 +246,7 @@ function newGame() {
     //hide play button, create newGame button that calls main
     $("#play").fadeOut();
     $("#newGame").on("click", function() {
-        console.log("new game");
+        // console.log("new game");
         $("#playercard").html(``)
         $("#compcard").html(``)
         main();
@@ -259,11 +256,11 @@ function newGame() {
 //tests if either deck needs to be shuffled and shuffles if needed
 function ifShuffle() {
     if(playerHand.length === 0) {
-        console.log("shuffle player")
+        // console.log("shuffle player")
         shuffle(playerWins, playerHand);
     }
     if(compHand.length === 0) {
-        console.log("shuffle comp")
+        // console.log("shuffle comp")
         shuffle(compWins, compHand);
     }
 }

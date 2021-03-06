@@ -6,11 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script defer src="./js/script.js"></script>
+    <link rel="stylesheet" href="./css/style.css">
     <title>Pokemon War</title>
 </head>
 <body>
-    <h1>titel</h1>
-    <p>rules</p>
+    <h1>Pokemon War</h1>
+    <ol id="rules">
+        <li></li>
+        <li>Press "Play to deal a card.</li>
+        <li>The player who's pokemon has the highest base stats wins.</li>
+        <li>The winning player gets both pokemon</li>
+        <li>If base stats are equal, begin a war. In a war, both sides add 3 more cards to the pot and deal out one more card.</li>
+        <li>Once a player has earned every pokemon, they achieve victory</li>
+    </ol>
+    <button id="start">Start</button>
+    <button id="mobileStart">Ok</button>
     <h3>who wins</h3>
     <div id="player">
         <div class="deck"></div>
@@ -23,7 +33,7 @@
         <div class="winnings"></div>
     </div>
     <button id="play">Play</button>
-    <button id="start">Start</button>
+    
     <button id="newGame">New Game</button>
     <button id="war">WAR!</button>
     
