@@ -1,4 +1,15 @@
+@font-face {
+    font-family: "pokeFont";
+    src: 
+        url("/pokemon/Pokemon\ Solid.ttf")
+        format("opentype");
+    src: 
+        url("/pokemon/Pokemon\ Solid.ttf")
+        format("truetype");
+}
+
 body {
+    font-family: "pokeFont", sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -11,6 +11,7 @@ It connects to pokeapi.co to pull stats, sprites, and types of all pokemon, then
 URLS:
 Site hosted at: https://piemonke.github.io/Pokemon-War/
 API: https://pokeapi.co/
+Font from: https://www.dafont.com/pokemon.font
 
 Planned features to be added at a later date:
 Pokemon Type Advantage system.
