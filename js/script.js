@@ -161,8 +161,10 @@ function play() {
     //if either players hands AND winnings are both empty, declare victory
     //else continue with function 
     if(playerHand.length === 0 && playerWins.length === 0) {
+        $("#battleOutcome").text("The Player is victorious");
         newGame();
     } else if(compHand.length === 0 && compWins.length === 0) {
+        $("#battleOutcome").text("The Computer is victorious");
         newGame();
     } else {
         cardPlayer = playerHand.shift();
@@ -187,15 +189,15 @@ function compare(player, comp) {
     
     pot.push(player, comp)
     if(player.stats === comp.stats) {
-        // console.log("tie");
+        $("#battleOutcome").text("PokeWAR!");
         //call war function
         war();
     } else if(player.stats > comp.stats) {
-        // console.log("player wins");
+        $("#battleOutcome").text("Player wins the battle");
         //give cards to player deck
         addToWinnings(playerWins);
     } else {
-        // console.log("computer wins");
+        $("#battleOutcome").text("Computer wins the battle");
         //give cards to comp deck
         addToWinnings(compWins);
     }
