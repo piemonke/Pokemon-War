@@ -15,6 +15,7 @@ API: https://pokeapi.co/
 Planned features to be added at a later date:
 Pokemon Type Advantage system.
 Better layout for desktop play.
+Filter for "gimmick" pokemon such as gigantimax or mega-evolutions"
 
 Known Bugs:
 If either side runs out of cards during a war, the game declares a winner, however does not actually fulfill the war, nor does it add cards in the pot back into the pool for the next game.

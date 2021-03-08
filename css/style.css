@@ -3,4 +3,40 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: aqua;
+}
+
+#newGame {
+    display: none;
+}
+
+#play {
+    display: none;
+}
+
+
+@media (min-width: 1080px) {
+    #mobileStart {
+        display: none;
+    }
+
+    #start {
+        visibility: 100;
+    }
+
+    #player {
+        align-self: flex-start;
+        padding-left: 33vw;
+    }
+    
+    #comp {
+        align-self: flex-end;
+        padding-right: 33vw;
+    }
+}
+
+@media (max-width: 1080px) {
+    #start {
+        display: none;
+    }
 }

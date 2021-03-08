@@ -1,12 +1,4 @@
-//random testing, will be removed on finished project
-// alert("JS is loaded");
-// console.log($);
-
-
-// console.log("https://pokeapi.co/api/v2/pokemon?offset=0&limit=" + length.toString());
-
-
-//variables--move into smaller scope before delivery
+//variables
 let pokeList = [];
 let removedPoke = [];
 let playerHand = [];
@@ -15,19 +7,16 @@ let compHand = [];
 let compWins = [];
 let cardPlayer;
 let cardComp;
-let pot =[];
+let pot = [];
 
 
-getPokeList();
 
 
 //functions
 
 //function to get number of pokemon in API
 //nested pull request puts all data into array
-function getPokeList() {
-    
-}
+
 
 //type data that will setup later, this web will be annoying, need lots of .contains chec
 // $.ajax({
@@ -40,14 +29,15 @@ function getPokeList() {
 //         console.log("type data pull error")
 //     }
 // )
+
 $.ajax({
     url:"https://pokeapi.co/api/v2/pokemon"
 }).then(
     (data) => {
         //uncomment below for delivery
-        //let length = data.count;
+        let length = data.count;
         //setting length to static ammount to make testing not take ages
-        let length = 52;
+        // let length = 20;
         $.ajax({
             url:"https://pokeapi.co/api/v2/pokemon?offset=0&limit=" + length
         }).then(
@@ -100,10 +90,12 @@ $.ajax({
                 console.log("Pokemon List Request Denied", error);
             }
         ).then((response) => {
+
             $("#start").on("click", function() {
                 main();
             });
             $("#mobileStart").on("click", function() {
+                //for mobile, remove rules and start to free up screen space
                 $("#rules").fadeOut();
                 $("#mobileStart").fadeOut();
                 main();
@@ -132,17 +124,17 @@ $.ajax({
 function main() {
     //hide or remove start button
     $("#start").fadeOut();
+    $("#newGame").fadeOut();
     $("#play").fadeIn();
-    pokeList = pokeList.filter(pokemon => !pokemon.hasOwnProperty("url"));
+    // pokeList = pokeList.filter(pokemon => !pokemon.hasOwnProperty("url"));
     deal(pokeList, playerHand, compHand);
-    $("#play").on("click", function() {
+    $("#play").fadeIn().on("click", function() {
         play()
     });
 }
 
 //deals card from main deck into each players hand
 function deal(deck, player, computer) {
-    // console.log(deck);
     //set deck length even to prevent undefined error
     if(deck.length % 2) {
         deck = deck.splice(0, deck.length - 1);
@@ -151,7 +143,6 @@ function deal(deck, player, computer) {
         player.push(deck.splice(Math.floor(Math.random() * deck.length), 1)[0]);
         computer.push(deck.splice(Math.floor(Math.random() * deck.length), 1)[0]);
     }
-    // console.log(player, computer);
 }
 
 //unshifts card from each deck, puts card on the field
@@ -169,8 +160,16 @@ function play() {
     } else {
         cardPlayer = playerHand.shift();
         cardComp = compHand.shift();
-        $("#playercard").html(`<h1>${cardPlayer.name}</h1><br><img src="${cardPlayer.sprite}"><br><p>${cardPlayer.stats}</p>`)
-        $("#compcard").html(`<h1>${cardComp.name}</h1><br><img src="${cardComp.sprite}"><br><p>${cardComp.stats}</p>`)
+        $("#playercard").html(`<h1>Player</h1><br>
+            <h2>${cardPlayer.name}</h2><br>
+            <img src="${cardPlayer.sprite}"><br>
+            <p>Base Stats: ${cardPlayer.stats}</p>
+            <p>Cards remaining in hand: ${playerHand.length}</p>`);
+        $("#compcard").html(`<h1>Computer</h1><br>
+            <h2>${cardComp.name}</h2><br>
+            <img src="${cardComp.sprite}"><br>
+            <p>Base Stats: ${cardComp.stats}</p>
+            <p>Cards remaining in hand: ${compHand.length}</p>`);
 
         //call compare function to keep variables in scope
         compare(cardPlayer, cardComp);
@@ -201,31 +200,24 @@ function compare(player, comp) {
         //give cards to comp deck
         addToWinnings(compWins);
     }
+    $("#playercard").append(`<p>Cards won in pile: ${playerWins.length}</p>`);
+    $("#compcard").append(`<p>Cards won in pile: ${compWins.length}</p>`);
 }
 
 //adds cards won to winnings deck
 function addToWinnings(winnerDeck) {
-    // console.log(pot);
     //add pot to winnersDeck
     winnerDeck.push(...pot);
-    // console.log(winnerDeck);
     //clear pot
     pot.splice(0, pot.length);
 }
 
 function war() {
-    // console.log(playerHand, compHand);
-    // console.log("WAR")
     for(i = 0; i < 3; i++) {
         ifShuffle();
-        // console.log("players added to the pot");
         pot.push(playerHand.shift());
         pot.push(compHand.shift());
-        // console.log(pot);
     }
-    // console.log(playerHand, compHand);
-    // console.log("WAR pot");
-    // console.log(pot);
     $("#war").on("click", function() {
         play();
     })
@@ -247,8 +239,7 @@ function newGame() {
     compWins.splice(0, compWins.length); 
     //hide play button, create newGame button that calls main
     $("#play").fadeOut();
-    $("#newGame").on("click", function() {
-        // console.log("new game");
+    $("#newGame").fadeIn().on("click", function() {
         $("#playercard").html(``)
         $("#compcard").html(``)
         main();
@@ -258,11 +249,9 @@ function newGame() {
 //tests if either deck needs to be shuffled and shuffles if needed
 function ifShuffle() {
     if(playerHand.length === 0) {
-        // console.log("shuffle player")
         shuffle(playerWins, playerHand);
     }
     if(compHand.length === 0) {
-        // console.log("shuffle comp")
         shuffle(compWins, compHand);
     }
 }
