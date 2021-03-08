@@ -56,7 +56,10 @@ $.ajax({
                         url:pokemon.url
                     }).then(
                         (data) => {
-                            // console.log(data);
+                            let lower = pokemon.name;
+                            lower = lower[0].toUpperCase() + lower.slice(1);
+                            pokemon.name = lower;
+
                             //store url for sprite data
                             pokemon.sprite = data.sprites.front_default;
 
